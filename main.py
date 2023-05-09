@@ -8,6 +8,8 @@ import click
 from PIL import Image
 from click import Context
 
+__version__ = "0.0.0"
+
 
 @click.group()
 @click.argument("path", type=click.Path(exists=True, file_okay=False, path_type=pathlib.Path))
