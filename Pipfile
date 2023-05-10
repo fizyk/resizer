@@ -9,6 +9,8 @@ pillow = "*"
 
 [dev-packages]
 pdbpp = "==0.10.3"
+towncrier = "==22.8"
+tbump = "==6.9.0"
 
 [requires]
 python_version = "3.11"
