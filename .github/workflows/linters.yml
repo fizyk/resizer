@@ -1,0 +1,17 @@
+name: Run linters
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    uses: fizyk/actions-reuse/.github/workflows/linters-python.yml@v2.0.0
+    with:
+      pipenv-install-options: "--skip-lock"
+      black: true
+      mypy: true
+      ruff: true
+

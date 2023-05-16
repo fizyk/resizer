@@ -1,12 +1,13 @@
+"""Main resizer module."""
 import pathlib
 from collections import defaultdict
 from queue import SimpleQueue
-from typing import Dict, Generator, Tuple, Optional, Union
+from typing import Any, Dict, Generator, Optional, Tuple, Union
 
-import PIL.TiffImagePlugin
 import click
-from PIL import Image
+import PIL.TiffImagePlugin
 from click import Context
+from PIL import Image
 
 __version__ = "0.0.0"
 
@@ -15,6 +16,7 @@ __version__ = "0.0.0"
 @click.argument("path", type=click.Path(exists=True, file_okay=False, path_type=pathlib.Path))
 @click.pass_context
 def resizer(ctx: Context, path: pathlib.Path) -> None:
+    """Resizer command group."""
     ctx.ensure_object(dict)
     ctx.obj["path"] = path
 
@@ -22,6 +24,7 @@ def resizer(ctx: Context, path: pathlib.Path) -> None:
 @resizer.command()
 @click.pass_context
 def stats(ctx: Context) -> None:
+    """Print path's images stats."""
     ctx.ensure_object(dict)
     path = ctx.obj["path"]
     click.echo(f"Reading images to process from {path.absolute()}")
@@ -35,6 +38,7 @@ def stats(ctx: Context) -> None:
 @click.option("--dpi", type=int)
 @click.pass_context
 def resize(ctx: Context, max_size: int, dpi: int) -> None:
+    """Resize images in given path."""
     ctx.ensure_object(dict)
     path = ctx.obj["path"]
     click.echo(f"Reading images to process from {path.absolute()}")
@@ -44,6 +48,7 @@ def resize(ctx: Context, max_size: int, dpi: int) -> None:
 
 
 def list_images(path: pathlib.Path) -> Generator[pathlib.Path, None, None]:
+    """List all images from path."""
     directories: SimpleQueue[pathlib.Path] = SimpleQueue()
     directories.put(path)
     while not directories.empty():
@@ -60,19 +65,22 @@ def list_images(path: pathlib.Path) -> Generator[pathlib.Path, None, None]:
 
 
 def count_images(path):
+    """Count all images in a path."""
     return sum(1 for _ in list_images(path))
 
 
-def extract_dpis(image :Image) -> Optional[Tuple[Union[int, float], Union[int, float]]]:
+def extract_dpis(image: Image.Image) -> Optional[Tuple[Union[int, float], Union[int, float]]]:
+    """Extract DPI information from Image."""
     dpis = image.info.get("dpi")
     if not dpis:
-        return
+        return None
     if isinstance(dpis[0], PIL.TiffImagePlugin.IFDRational):
         return float(dpis[0]), float(dpis[1])
     return dpis
 
 
 def image_stats(images: Generator[pathlib.Path, None, None]) -> int:
+    """Actual print all images statistics."""
     size_stat: Dict = defaultdict(int)
     dpi_stat: Dict = defaultdict(int)
     images_count = 0
@@ -99,6 +107,7 @@ def image_stats(images: Generator[pathlib.Path, None, None]) -> int:
 
 
 def resize_images(images: Generator[pathlib.Path, None, None], max_size, defined_dpi, images_count: int) -> None:
+    """Resize images."""
     with click.progressbar(images, show_percent=True, show_pos=True, length=images_count) as bar:
         for image_file in bar:
             with Image.open(image_file) as image:
@@ -113,7 +122,7 @@ def resize_images(images: Generator[pathlib.Path, None, None], max_size, defined
                     width = width * (max_size / height)
                     height = max_size
                 new_image = image.resize((int(width), int(height)), Image.Resampling.LANCZOS)
-                kwargs = {"quality": 75}
+                kwargs: Dict[str, Any] = {"quality": 75}
                 if dpi := extract_dpis(image):
                     if dpi[0] > defined_dpi:
                         kwargs["dpi"] = (defined_dpi, defined_dpi)
@@ -127,7 +136,7 @@ def resize_images(images: Generator[pathlib.Path, None, None], max_size, defined
 
 
 # Press the green button in the gutter to run the script.
-if __name__ == '__main__':
+if __name__ == "__main__":
     resizer()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
