@@ -13,7 +13,6 @@ jobs:
       - uses: fizyk/actions-reuse/.github/actions/pipenv@v2.0.0
         with:
           python-version: "3.11"
-          pipenv-install-options: "--skip-lock"
           command: tbump --dry-run --only-patch $(pipenv run tbump current-version)"-x"
   towncrier:
     runs-on: ubuntu-latest
@@ -22,6 +21,21 @@ jobs:
       - uses: fizyk/actions-reuse/.github/actions/pipenv@v2.0.0
         with:
           python-version: "3.11"
-          pipenv-install-options: "--skip-lock"
           command: towncrier check --compare-with origin/main
           fetch-depth: 0
+
+  resizer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Upgrade pip
+        run: pip install --upgrade pip
+      - name: Install package
+        run: pip install .
+      - name: Run resizer --help
+        run: resizer --help

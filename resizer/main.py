@@ -9,8 +9,6 @@ import PIL.TiffImagePlugin
 from click import Context
 from PIL import Image
 
-__version__ = "0.0.0"
-
 
 @click.group()
 @click.argument("path", type=click.Path(exists=True, file_okay=False, path_type=pathlib.Path))
@@ -133,10 +131,3 @@ def resize_images(images: Generator[pathlib.Path, None, None], max_size, defined
             except ValueError as e:
                 click.echo(f"Encountered {e} while processing the {image_file}")
             new_image.close()
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == "__main__":
-    resizer()
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
