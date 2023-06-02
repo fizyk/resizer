@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 click = "*"
 pillow = "*"
-resizer = {editable = true, path = "."}
 
 [dev-packages]
 pdbpp = "==0.10.3"
