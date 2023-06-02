@@ -14,10 +14,6 @@ classifiers = [
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3 :: Only",
 ]
@@ -25,7 +21,10 @@ dependencies = [
     "click",
     "pillow",
 ]
-requires-python = "== 3.11"
+requires-python = ">= 3.11"
+
+[project.scripts]
+resizer = "resizer.main:resizer"
 
 [project.urls]
 "Source" = "https://github.com/fizyk/resizer"
@@ -39,14 +38,18 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 zip-safe = true
 
-#[tool.setuptools.packages.find]
-#include = ["pytest_redis*"]
-#exclude = ["tests*"]
-#namespaces = false
+#[tool.setuptools.package_dir]
+#resizer = "src/resizer"
+
+
+[tool.setuptools.packages.find]
+include = ["resizer*"]
+exclude = ["tests*"]
+namespaces = false
 
 [tool.pytest.ini_options]
 xfail_strict=true
-addopts = "--max-worker-restart=0 --showlocals --verbose --cov"
+addopts = "--showlocals --verbose --cov"
 testpaths = "tests"
 
 [tool.black]
@@ -62,6 +65,11 @@ select = [
   "F",   # pyflakes
   "I",   # isort
   "D",   # pydocstyle
+]
+
+[tool.mypy]
+exclude = [
+    "build/*",
 ]
 
 [tool.towncrier]
@@ -122,7 +130,7 @@ default = ""
 # section containing the path of the file, relative to the
 # tbump.toml location.
 [[tool.tbump.file]]
-src = "main.py"
+src = "resizer/__init__.py"
 
 [[tool.tbump.file]]
 src = "pyproject.toml"
