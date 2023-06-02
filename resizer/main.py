@@ -2,10 +2,9 @@
 import pathlib
 from collections import defaultdict
 from queue import SimpleQueue
-from typing import Any, Dict, Generator, Optional, Tuple, Union
+from typing import Any, Dict, Generator
 
 import click
-import PIL.TiffImagePlugin
 from click import Context
 from PIL import Image
 
@@ -33,16 +32,15 @@ def stats(ctx: Context) -> None:
 
 @resizer.command()
 @click.option("--max-size", type=int)
-@click.option("--dpi", type=int)
 @click.pass_context
-def resize(ctx: Context, max_size: int, dpi: int) -> None:
+def resize(ctx: Context, max_size: int) -> None:
     """Resize images in given path."""
     ctx.ensure_object(dict)
     path = ctx.obj["path"]
     click.echo(f"Reading images to process from {path.absolute()}")
     images_count = count_images(path)
     click.echo(f"Found {images_count} image files.")
-    resize_images(list_images(path), max_size, dpi, images_count)
+    resize_images(list_images(path), max_size, images_count)
 
 
 def list_images(path: pathlib.Path) -> Generator[pathlib.Path, None, None]:
@@ -67,20 +65,9 @@ def count_images(path):
     return sum(1 for _ in list_images(path))
 
 
-def extract_dpis(image: Image.Image) -> Optional[Tuple[Union[int, float], Union[int, float]]]:
-    """Extract DPI information from Image."""
-    dpis = image.info.get("dpi")
-    if not dpis:
-        return None
-    if isinstance(dpis[0], PIL.TiffImagePlugin.IFDRational):
-        return float(dpis[0]), float(dpis[1])
-    return dpis
-
-
 def image_stats(images: Generator[pathlib.Path, None, None]) -> int:
     """Actual print all images statistics."""
     size_stat: Dict = defaultdict(int)
-    dpi_stat: Dict = defaultdict(int)
     images_count = 0
     for image_file in images:
         with Image.open(image_file) as image:
@@ -88,30 +75,23 @@ def image_stats(images: Generator[pathlib.Path, None, None]) -> int:
                 size = (image.width, image.height)
             else:
                 size = (image.height, image.width)
-            dpi_stat[extract_dpis(image)] += 1
             size_stat[size] += 1
             images_count += 1
     click.echo("Sizes:")
     for size, count in size_stat.items():
         click.echo(f" {size[0]:5}x{size[1]:<5}: {count:6}")
-    click.echo("DPIs:")
-    for dpi, count in dpi_stat.items():
-        if dpi:
-            click.echo(f" {dpi[0]:3}x{dpi[1]:<3}: {count:4}")
-        else:
-            click.echo(f"      - : {count:4}")
 
     return images_count
 
 
-def resize_images(images: Generator[pathlib.Path, None, None], max_size, defined_dpi, images_count: int) -> None:
+def resize_images(images: Generator[pathlib.Path, None, None], max_size, images_count: int) -> None:
     """Resize images."""
     with click.progressbar(images, show_percent=True, show_pos=True, length=images_count) as bar:
         for image_file in bar:
-            resize_image(image_file, image_file, max_size, defined_dpi)
+            resize_image(image_file, image_file, max_size)
 
 
-def resize_image(image_file, destination: pathlib.Path, max_size, defined_dpi: int) -> None:
+def resize_image(image_file, destination: pathlib.Path, max_size) -> None:
     """Resize given image to defined destination."""
     with Image.open(image_file) as image:
         width = image.width
@@ -126,9 +106,6 @@ def resize_image(image_file, destination: pathlib.Path, max_size, defined_dpi: i
             height = max_size
         new_image = image.resize((int(width), int(height)), Image.Resampling.LANCZOS)
         kwargs: Dict[str, Any] = {"quality": 75}
-        if dpi := extract_dpis(image):
-            if dpi[0] > defined_dpi:
-                kwargs["dpi"] = (defined_dpi, defined_dpi)
         if exif := image.info.get("exif"):
             kwargs["exif"] = exif
     try:

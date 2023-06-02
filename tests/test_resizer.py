@@ -42,7 +42,7 @@ def test_count_images(root_path: Path) -> None:
 def test_resize_image(root_path, destination_image: Path) -> None:
     """Check that image gets resized."""
     source_image = root_path / SAMPLE_IMAGE_NAME_PATH
-    resize_image(source_image, destination_image, max_size=300, defined_dpi=300)
+    resize_image(source_image, destination_image, max_size=300)
     with Image.open(destination_image) as test_result:
         assert test_result.width == 300
         assert test_result.height == 160
