@@ -1,0 +1,1 @@
+Freeze Pillow and click requirements in Pipfile
