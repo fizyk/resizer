@@ -108,26 +108,31 @@ def resize_images(images: Generator[pathlib.Path, None, None], max_size, defined
     """Resize images."""
     with click.progressbar(images, show_percent=True, show_pos=True, length=images_count) as bar:
         for image_file in bar:
-            with Image.open(image_file) as image:
-                width = image.width
-                height = image.height
-                if width <= max_size and height <= max_size:
-                    continue
-                if image.width > image.height:
-                    height = height * (max_size / width)
-                    width = max_size
-                else:
-                    width = width * (max_size / height)
-                    height = max_size
-                new_image = image.resize((int(width), int(height)), Image.Resampling.LANCZOS)
-                kwargs: Dict[str, Any] = {"quality": 75}
-                if dpi := extract_dpis(image):
-                    if dpi[0] > defined_dpi:
-                        kwargs["dpi"] = (defined_dpi, defined_dpi)
-                if exif := image.info.get("exif"):
-                    kwargs["exif"] = exif
-            try:
-                new_image.save(image_file, **kwargs)
-            except ValueError as e:
-                click.echo(f"Encountered {e} while processing the {image_file}")
-            new_image.close()
+            resize_image(image_file, image_file, max_size, defined_dpi)
+
+
+def resize_image(image_file, destination: pathlib.Path, max_size, defined_dpi: int) -> None:
+    """Resize given image to defined destination."""
+    with Image.open(image_file) as image:
+        width = image.width
+        height = image.height
+        if width <= max_size and height <= max_size:
+            return
+        if image.width > image.height:
+            height = height * (max_size / width)
+            width = max_size
+        else:
+            width = width * (max_size / height)
+            height = max_size
+        new_image = image.resize((int(width), int(height)), Image.Resampling.LANCZOS)
+        kwargs: Dict[str, Any] = {"quality": 75}
+        if dpi := extract_dpis(image):
+            if dpi[0] > defined_dpi:
+                kwargs["dpi"] = (defined_dpi, defined_dpi)
+        if exif := image.info.get("exif"):
+            kwargs["exif"] = exif
+    try:
+        new_image.save(destination, **kwargs)
+    except ValueError as e:
+        click.echo(f"Encountered {e} while processing the {image_file}")
+    new_image.close()

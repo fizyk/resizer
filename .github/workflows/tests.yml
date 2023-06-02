@@ -1,0 +1,15 @@
+name: Run tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  tests:
+    uses: fizyk/actions-reuse/.github/workflows/tests-pytests.yml@v2.0.0
+    with:
+      python-versions: '["3.11"]'
+    secrets:
+      codecov_token: ${{ secrets.CODECOV_TOKEN }}
