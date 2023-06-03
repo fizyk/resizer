@@ -6,17 +6,16 @@ import pytest
 from PIL import Image
 from pytest import FixtureRequest
 
-from resizer.main import count_images, list_images, resize_image
+from resizer.resize import Resizer
+from resizer.stat import count_images, list_images
 
 SAMPLE_IMAGE_NAME = "DALL·E generated art.png"
 
-SAMPLE_IMAGE_NAME_PATH = "samples/DALL·E generated art.png"
-
 
 @pytest.fixture
-def root_path(request: FixtureRequest) -> Path:
+def samples_path(request: FixtureRequest) -> Path:
     """Return test root path."""
-    return request.path.parent
+    return request.path.parent.joinpath("samples")
 
 
 @pytest.fixture
@@ -27,22 +26,23 @@ def destination_image(tmp_path: Path) -> Generator[Path, None, None]:
     destination_image.unlink(True)
 
 
-def test_list_images(root_path: Path) -> None:
+def test_list_images(samples_path: Path) -> None:
     """Check proper image listing."""
-    image_paths = list(list_images(root_path.joinpath("samples")))
+    image_paths = list(list_images(samples_path))
     assert len(image_paths) == 1
     assert image_paths[0].name == "DALL·E generated art.png"
 
 
-def test_count_images(root_path: Path) -> None:
+def test_count_images(samples_path: Path) -> None:
     """Check proper image counting."""
-    assert count_images(root_path.joinpath("samples")) == 1
+    assert count_images(samples_path) == 1
 
 
-def test_resize_image(root_path, destination_image: Path) -> None:
+def test_resize_image(samples_path, destination_image, tmp_path: Path) -> None:
     """Check that image gets resized."""
-    source_image = root_path / SAMPLE_IMAGE_NAME_PATH
-    resize_image(source_image, destination_image, max_size=300)
+    source_image = samples_path / SAMPLE_IMAGE_NAME
+    resizer = Resizer(source=samples_path, destination=tmp_path, max_size=300)
+    resizer.resize_image(source_image, destination_image)
     with Image.open(destination_image) as test_result:
         assert test_result.width == 300
         assert test_result.height == 160
