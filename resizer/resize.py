@@ -21,6 +21,7 @@ class ProcessedImages(NamedTuple):
     width: int
     height: int
     processed: bool
+    error: Exception | None
 
 
 class NonInteruptableProcess(Process):
@@ -69,6 +70,7 @@ class Resizer:
 
         converted: List[ProcessedImages] = []
         skipped: List[ProcessedImages] = []
+        errored: List[ProcessedImages] = []
         try:
             with click.progressbar(
                 show_percent=True, show_pos=True, length=image_counter, label="Processing images"
@@ -85,6 +87,8 @@ class Resizer:
                         converted.append(image_processed)
                     else:
                         skipped.append(image_processed)
+                        if image_processed.error:
+                            errored.append(image_processed)
                     if processed_counter >= image_counter:
                         break
         except KeyboardInterrupt:
@@ -95,6 +99,10 @@ class Resizer:
             for process in processes:
                 process.join()
         click.echo(f" {len(converted)} of images got converted and {len(skipped)} got skipped.")
+        if errored:
+            click.echo(f" There were {len(errored)} errors.")
+            for errored_image in errored:
+                click.echo(f" {errored_image.image_path} errored with f{errored_image.error}")
 
     def process_images(self, to_process: Queue, processed: Queue, stop: Event) -> None:
         """Process images, one at a time."""
@@ -107,13 +115,16 @@ class Resizer:
                 continue
             image_file.relative_to(self.source)
             destination = self.destination / image_file.relative_to(self.source)
-            processed.put(self.resize_image(image_file, destination))
+            try:
+                processed.put(self.resize_image(image_file, destination))
+            except OSError as ex:
+                processed.put(ProcessedImages(image_file, 0, 0, True, ex))
 
     def resize_image(self, image_file: pathlib.Path, destination: pathlib.Path) -> ProcessedImages:
         """Resize image, return true if the resize had been performed."""
         with Image.open(image_file) as image:
             if image.width <= self.max_size and image.height <= self.max_size:
-                return ProcessedImages(destination, image.width, image.height, False)
+                return ProcessedImages(destination, image.width, image.height, False, None)
             if image.width > image.height:
                 height = int(image.height * self.max_size / image.width)
                 width = self.max_size
@@ -126,8 +137,8 @@ class Resizer:
                 kwargs["exif"] = exif
             try:
                 new_image.save(destination, **kwargs)
-                return ProcessedImages(destination, width, height, True)
+                return ProcessedImages(destination, width, height, True, None)
             except ValueError:
-                return ProcessedImages(destination, width, height, False)
+                return ProcessedImages(destination, width, height, False, None)
             finally:
                 new_image.close()
