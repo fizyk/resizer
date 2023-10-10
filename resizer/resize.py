@@ -76,9 +76,11 @@ class Resizer:
         errored: List[ProcessedImages] = []
         size_before = 0
         size_after = 0
+
         try:
+            items: List[ProcessedImages] = []
             with click.progressbar(
-                show_percent=True, show_pos=True, length=image_counter, label="Processing images"
+                items, show_percent=True, show_pos=True, length=image_counter, label="Processing images"
             ) as bar:
                 processed_counter: int = 0
                 while True:
