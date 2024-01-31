@@ -1,4 +1,5 @@
 """Statistic gathering methods."""
+
 import pathlib
 from collections import defaultdict
 from queue import SimpleQueue

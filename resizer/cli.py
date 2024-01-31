@@ -1,4 +1,5 @@
 """Main resizer module."""
+
 import pathlib
 
 import click
