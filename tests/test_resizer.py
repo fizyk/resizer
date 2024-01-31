@@ -1,4 +1,5 @@
 """Resizer tests."""
+
 from pathlib import Path
 from typing import Generator
 
