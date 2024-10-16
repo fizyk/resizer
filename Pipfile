@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 click = "==8.1.7"
-pillow = "==10.4.0"
+pillow = "==11.0.0"
 resizer = {editable = true, path = "."}
 
 [dev-packages]
