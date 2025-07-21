@@ -9,7 +9,7 @@ pillow = "==11.3.0"
 resizer = {editable = true, path = "."}
 
 [dev-packages]
-pdbpp = "==0.11.6"
+pdbpp = "==0.11.7"
 towncrier = "==24.8.0"
 tbump = "==6.11.0"
 mypy = "==1.17.0"
