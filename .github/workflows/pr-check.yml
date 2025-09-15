@@ -6,7 +6,7 @@ on:
 
 jobs:
   pr-check:
-    uses: fizyk/actions-reuse/.github/workflows/shared-pr-check.yml@v3.1.1
+    uses: fizyk/actions-reuse/.github/workflows/shared-pr-check.yml@v4.0.1
 
   resizer:
     runs-on: ubuntu-latest
