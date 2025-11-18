@@ -10,7 +10,7 @@ resizer = {editable = true, path = "."}
 
 [dev-packages]
 pdbpp = "==0.11.7"
-towncrier = "==24.8.0"
+towncrier = "==25.8.0"
 tbump = "==6.11.0"
 mypy = "==1.17.1"
 types-pillow = "==10.2.0.20240822"
