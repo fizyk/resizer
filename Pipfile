@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-click = "==8.4.0"
+click = "==8.4.1"
 pillow = "==12.2.0"
 resizer = {editable = true, path = "."}
 
