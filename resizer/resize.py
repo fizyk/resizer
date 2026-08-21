@@ -80,7 +80,11 @@ class Resizer:
         try:
             items: List[ProcessedImages] = []
             with click.progressbar(
-                items, show_percent=True, show_pos=True, length=image_counter, label="Processing images"
+                items,
+                show_percent=True,
+                show_pos=True,
+                length=image_counter,
+                label="Processing images",
             ) as bar:
                 processed_counter: int = 0
                 while True:
@@ -138,7 +142,15 @@ class Resizer:
         with Image.open(image_file) as image:
             old_size = image_file.stat().st_size
             if image.width <= self.max_size and image.height <= self.max_size:
-                return ProcessedImages(destination, image.width, image.height, old_size, old_size, False, None)
+                return ProcessedImages(
+                    destination,
+                    image.width,
+                    image.height,
+                    old_size,
+                    old_size,
+                    False,
+                    None,
+                )
             if image.width > image.height:
                 height = int(image.height * self.max_size / image.width)
                 width = self.max_size
