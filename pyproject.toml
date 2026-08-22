@@ -3,7 +3,7 @@ build-backend = "uv_build"
 requires = [ "uv-build>=0.12.5,<0.13" ]
 
 [project]
-name = "resizer"
+name = "pyverter"
 version = "0.0.0"
 description = "(Batch) Image resizer cli command based on Pillow"
 readme = "README.rst"
@@ -11,7 +11,7 @@ keywords = [ "cli", "image", "processing" ]
 license = { file = "LICENSE" }
 requires-python = ">=3.12"
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
+    "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: MIT",
     "Natural Language :: English",
     "Operating System :: OS Independent",
@@ -29,12 +29,12 @@ name = "Grzegorz Śliwiński"
 email = "fizyk+pypi@fizyk.dev"
 
 [project.urls]
-Source = "https://github.com/fizyk/resizer"
-"Bug Tracker" = "https://github.com/fizyk/resizer/issues"
-Changelog = "https://github.com/fizyk/resizer/blob/v0.0.0/CHANGES.rst"
+Source = "https://github.com/fizyk/pyverter"
+"Bug Tracker" = "https://github.com/fizyk/pyverter/issues"
+Changelog = "https://github.com/fizyk/pyverter/blob/v0.0.0/CHANGES.rst"
 
 [project.scripts]
-resizer = "resizer.cli:resizer"
+pyverter = "pyverter.cli:pyverter"
 
 [dependency-groups]
 dev = [
@@ -52,7 +52,7 @@ release = [
 ]
 
 [tool.uv.build-backend]
-module-name = "resizer"
+module-name = "pyverter"
 module-root = ""
 source-include = [ "CHANGES.rst" ]
 
@@ -98,7 +98,7 @@ name = "extra"
 default = ""
 
 [[tool.tbump.file]]
-src = "resizer/__init__.py"
+src = "pyverter/__init__.py"
 
 [[tool.tbump.file]]
 src = "pyproject.toml"
@@ -106,7 +106,7 @@ search = 'version = "{current_version}"'
 
 [[tool.tbump.file]]
 src = "pyproject.toml"
-search = 'Changelog = "https://github.com/fizyk/resizer/blob/v{current_version}/CHANGES.rst"'
+search = 'Changelog = "https://github.com/fizyk/pyverter/blob/v{current_version}/CHANGES.rst"'
 
 [tool.tbump.git]
 message_template = "Release {new_version}"
@@ -128,7 +128,7 @@ regex = '''
 [tool.towncrier]
 directory = "newsfragments"
 filename = "CHANGES.rst"
-issue_format = "`#{issue} <https://github.com/fizyk/resizer/issues/{issue}>`_"
+issue_format = "`#{issue} <https://github.com/fizyk/pyverter/issues/{issue}>`_"
 single_file = true
 
 [[tool.towncrier.type]]

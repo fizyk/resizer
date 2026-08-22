@@ -1,24 +1,24 @@
-"""Main resizer module."""
+"""Main pyverter module."""
 
 import pathlib
 
 import click
 from click import Context
 
-from resizer.resize import Resizer
-from resizer.stat import image_stats, list_images
+from pyverter.resize import Resizer
+from pyverter.stat import image_stats, list_images
 
 
 @click.group()
 @click.argument("path", type=click.Path(exists=True, file_okay=False, path_type=pathlib.Path))
 @click.pass_context
-def resizer(ctx: Context, path: pathlib.Path) -> None:
-    """Resizer command group."""
+def pyverter(ctx: Context, path: pathlib.Path) -> None:
+    """Pyverter command group."""
     ctx.ensure_object(dict)
     ctx.obj["path"] = path
 
 
-@resizer.command()
+@pyverter.command()
 @click.pass_context
 def stats(ctx: Context) -> None:
     """Print path's images stats."""
@@ -30,7 +30,7 @@ def stats(ctx: Context) -> None:
     pass
 
 
-@resizer.command()
+@pyverter.command()
 @click.option("--max-size", type=int)
 @click.pass_context
 def resize(ctx: Context, max_size: int) -> None:
