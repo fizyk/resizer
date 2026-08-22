@@ -640,7 +640,7 @@ wheels = [
 ]
 
 [[package]]
-name = "resizer"
+name = "pyverter"
 version = "0.0.0"
 source = { editable = "." }
 dependencies = [

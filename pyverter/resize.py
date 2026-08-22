@@ -11,8 +11,8 @@ from typing import Any, Dict, List, NamedTuple
 import click
 from PIL import Image
 
-from resizer.stat import list_images
-from resizer.tools import sizeof_fmt
+from pyverter.stat import list_images
+from pyverter.tools import sizeof_fmt
 
 
 class ProcessedImages(NamedTuple):

@@ -1,4 +1,4 @@
-"""Resizer tests."""
+"""Pyverter tests."""
 
 from pathlib import Path
 from typing import Generator
@@ -7,8 +7,8 @@ import pytest
 from PIL import Image
 from pytest import FixtureRequest
 
-from resizer.resize import Resizer
-from resizer.stat import count_images, list_images
+from pyverter.resize import Resizer
+from pyverter.stat import count_images, list_images
 
 SAMPLE_IMAGE_NAME = "DALL·E generated art.png"
 
