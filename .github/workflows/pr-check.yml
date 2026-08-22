@@ -4,22 +4,10 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions: {}
+
 jobs:
   pr-check:
-    uses: fizyk/actions-reuse/.github/workflows/shared-pr-check.yml@v4.4.7
-
-  resizer:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v6
-        with:
-          python-version: 3.12
-      - name: Upgrade pip
-        run: pip install --upgrade pip
-      - name: Install package
-        run: pip install .
-      - name: Run resizer --help
-        run: resizer --help
+    uses: fizyk/actions-reuse/.github/workflows/shared-pr-check.yml@ae6177442c58a91f60ffaf7f7a90a331aaf3b049 # v5.4.1
+    with:
+      dependency-manager: uv
