@@ -8,11 +8,11 @@ version = "0.1.0"
 description = "(Batch) Image resizer cli command based on Pillow"
 readme = "README.rst"
 keywords = [ "cli", "image", "processing" ]
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = [ "LICENSE" ]
 requires-python = ">=3.12"
 classifiers = [
     "Development Status :: 3 - Alpha",
-    "License :: OSI Approved :: MIT",
     "Natural Language :: English",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
