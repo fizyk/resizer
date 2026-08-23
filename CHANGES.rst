@@ -3,6 +3,15 @@ CHANGELOG
 
 .. towncrier release notes start
 
+pyverter 0.1.1 (2026-08-23)
+===========================
+
+Miscellaneous
+-------------
+
+- Update license configuration in pyproject.toml to use SPDX expression and license-files.
+
+
 pyverter 0.1.0 (2026-08-23)
 ===========================
 
