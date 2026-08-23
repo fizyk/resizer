@@ -1,1 +1,0 @@
-Implemented multiprocessing - now images will be converted faster.

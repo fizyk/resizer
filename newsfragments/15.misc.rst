@@ -1,1 +1,0 @@
-Removed resizer editable installation from Pipfile. It breaks dependabot.

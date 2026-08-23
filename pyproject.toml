@@ -4,7 +4,7 @@ requires = [ "uv-build>=0.12.5,<0.13" ]
 
 [project]
 name = "pyverter"
-version = "0.0.0"
+version = "0.1.0"
 description = "(Batch) Image resizer cli command based on Pillow"
 readme = "README.rst"
 keywords = [ "cli", "image", "processing" ]
@@ -31,7 +31,7 @@ email = "fizyk+pypi@fizyk.dev"
 [project.urls]
 Source = "https://github.com/fizyk/pyverter"
 "Bug Tracker" = "https://github.com/fizyk/pyverter/issues"
-Changelog = "https://github.com/fizyk/pyverter/blob/v0.0.0/CHANGES.rst"
+Changelog = "https://github.com/fizyk/pyverter/blob/v0.1.0/CHANGES.rst"
 
 [project.scripts]
 pyverter = "pyverter.cli:pyverter"
@@ -113,7 +113,7 @@ message_template = "Release {new_version}"
 tag_template = "v{new_version}"
 
 [tool.tbump.version]
-current = "0.0.0"
+current = "0.1.0"
 regex = '''
   (?P<major>\d+)
   \.

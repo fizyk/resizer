@@ -1,1 +1,0 @@
-Build a package structure and define an entrypoint script. This will make the resizer properly installable.

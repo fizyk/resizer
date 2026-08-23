@@ -1,1 +1,0 @@
-Drop dpi related code as they do not really matter.
