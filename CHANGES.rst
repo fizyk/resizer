@@ -3,6 +3,18 @@ CHANGELOG
 
 .. towncrier release notes start
 
+pyverter 0.1.2 (2026-09-03)
+===========================
+
+Miscellaneous
+-------------
+
+- Add zizmor to pre-commit (`#336 <https://github.com/fizyk/pyverter/issues/336>`_)
+- Add Python 3.15 to CI (`#339 <https://github.com/fizyk/pyverter/issues/339>`_)
+- Mark support for python 3.12-3.14 (`#339 <https://github.com/fizyk/pyverter/issues/339>`_)
+- Add actionlint to pre-commit (`#349 <https://github.com/fizyk/pyverter/issues/349>`_)
+
+
 pyverter 0.1.1 (2026-08-23)
 ===========================
 
