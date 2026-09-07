@@ -64,10 +64,10 @@ line-length = 120
 
 [tool.ruff.lint]
 select = [
+    "D",   # pydocstyle
     "E",   # pycodestyle
     "F",   # pyflakes
     "I",   # isort
-    "D",   # pydocstyle
     "RUF", # Ruff specific
 ]
 
@@ -85,9 +85,9 @@ exclude = [
 ]
 
 [tool.pytest.ini_options]
-xfail_strict = true
-addopts = "--showlocals --verbose --cov"
 testpaths = "tests"
+addopts = "--showlocals --verbose --cov"
+xfail_strict = true
 
 [tool.tbump]
 
